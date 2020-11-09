@@ -47,6 +47,7 @@ dependencies:
   percent_indicator: "^2.1.5"
   intl: ^0.16.1
   gradient_progress: ^0.0.1
+  numberpicker: ^1.2.1
   
   
     

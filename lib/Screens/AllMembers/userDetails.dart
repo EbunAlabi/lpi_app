@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:lpi_app/Screens/Scan/genScan.dart';
 import 'package:lpi_app/components/rectangle_input_field.dart';
 import 'package:lpi_app/components/rounded_button.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -22,7 +23,9 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   AnimationController _animationController;
-  @override
+  int _currentHour = 1;
+  int _currentDay = 1;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -559,6 +562,22 @@ class _DetailPageState extends State<DetailPage> {
                                                     const EdgeInsets.all(8.0),
                                                 child: Column(
                                                   children: <Widget>[
+                                                    Row(
+                                                      children: [
+                                                        Align(
+                                                          alignment:
+                                                              Alignment.topLeft,
+                                                          child: Text(
+                                                            "MEMBER SUBSCRIPTION",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 20,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                     RoundedButton(
                                                       text: 'DEACTIVATE MEMBER',
                                                       press: () {},
@@ -738,12 +757,16 @@ class _DetailPageState extends State<DetailPage> {
                                                 children: <Widget>[
                                                   RoundedButton(
                                                     text: 'ADJUST HOURLY USAGE',
-                                                    press: () {},
+                                                    press: () {
+                                                      _showHourDialog();
+                                                    },
                                                   ),
                                                   RoundedButton(
                                                     text:
                                                         'ADJUST MONTHLY USAGE',
-                                                    press: () {},
+                                                    press: () {
+                                                      _showDayDialog();
+                                                    },
                                                   )
                                                 ],
                                               ),
@@ -770,5 +793,53 @@ class _DetailPageState extends State<DetailPage> {
         ],
       ),
     );
+  }
+
+  void _showHourDialog() {
+    showDialog<int>(
+        context: context,
+        builder: (BuildContext context) {
+          return new NumberPickerDialog.integer(
+            minValue: 1,
+            maxValue: 23,
+            title: new Text("Add Hours"),
+            initialIntegerValue: _currentHour,
+            confirmWidget:
+                new TextButton(onPressed: () {}, child: new Text('OK')),
+            cancelWidget: new TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: new Text('CANCEL')),
+          );
+        }).then((int value) {
+      if (value != null) {
+        setState(() => _currentHour = value);
+      }
+    });
+  }
+
+  void _showDayDialog() {
+    showDialog<int>(
+        context: context,
+        builder: (BuildContext context) {
+          return new NumberPickerDialog.integer(
+            minValue: 1,
+            maxValue: 23,
+            title: new Text("Add Days"),
+            initialIntegerValue: _currentDay,
+            confirmWidget:
+                new TextButton(onPressed: () {}, child: new Text('OK')),
+            cancelWidget: new TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: new Text('CANCEL')),
+          );
+        }).then((int value) {
+      if (value != null) {
+        setState(() => _currentDay = value);
+      }
+    });
   }
 }
